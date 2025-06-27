@@ -1,173 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:lead_app/model/profile_model/user_model.dart';
-import 'package:lead_app/service/api_service.dart';
+import 'package:lead_app/controller/login_controller/login_screen_controller.dart';
+import 'package:lead_app/controller/profile_controller/profile_screen_controller.dart';
+import 'package:lead_app/view/edit_profile_screen/edit_profie_screen.dart';
+import 'package:lead_app/view/login_screen/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<LoginScreenController>();
+
     return Scaffold(
-      appBar: AppBar(title: const Text("My Profile")),
-      body: FutureBuilder<UserModel>(
-        future: ApiService().fetchUserProfile(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      appBar: AppBar(
+        title: const Text("My Profile"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfileScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          IconButton(
+              onPressed: () {
+                provider.logout();
+                provider.loginEmailController.clear();
+                provider.loginPassController.clear();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ));
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      ),
+      body: Consumer<ProfileController>(
+        builder: (context, controller, _) {
+          if (controller.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData) {
+          }
+
+          final user = controller.user;
+
+          if (user == null) {
             return const Center(child: Text("No user data found."));
           }
 
-          final user = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(12)),
-                      height: 150,
-                      width: 150,
-                      child: const Icon(Icons.person),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "NAME: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.fullName.toUpperCase(),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "ROLE: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.roleLabel,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "EMAIL: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.email,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "PHONE: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.phone == "" ? "no phone number" : user.phone,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "WHATSAPP: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.whatsapp,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "GENDER: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.gender == "" ? "Not Specified" : user.gender,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "QUALIFICATION: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.qualification == ""
-                              ? "Not Specified"
-                              : user.qualification,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "ADDRESS: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                        Text(
-                          user.address == "" ? "Not Provided" : user.address,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(12)),
+                  height: 150,
+                  width: 150,
+                  child: const Icon(Icons.person, size: 100),
+                ),
+                const SizedBox(height: 20),
+                _profileRow("NAME", user.fullName.toUpperCase()),
+                _profileRow("ROLE", user.roleLabel),
+                _profileRow("EMAIL", user.email),
+                _profileRow("PHONE",
+                    user.phone.isEmpty ? "No phone number" : user.phone),
+                _profileRow("WHATSAPP", user.whatsapp),
+                _profileRow("GENDER",
+                    user.gender.isEmpty ? "Not Specified" : user.gender),
+                _profileRow(
+                    "QUALIFICATION",
+                    user.qualification.isEmpty
+                        ? "Not Specified"
+                        : user.qualification),
+                _profileRow("ADDRESS",
+                    user.address.isEmpty ? "Not Provided" : user.address),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _profileRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Text(
+            "$label: ",
+            style: const TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
       ),
     );
   }

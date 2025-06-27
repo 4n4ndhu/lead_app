@@ -19,6 +19,9 @@ class _LeadListScreenState extends State<LeadListScreen> {
     super.initState();
     final controller = context.read<LeadListController>();
     _searchController = TextEditingController(text: controller.searchQuery);
+    _searchController.addListener(() {
+      setState(() {}); // rebuild to reflect suffix icon changes
+    });
   }
 
   @override

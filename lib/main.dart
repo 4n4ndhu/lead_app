@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lead_app/controller/lead_controller/lead_list_controller.dart';
 import 'package:lead_app/controller/login_controller/login_screen_controller.dart';
+import 'package:lead_app/controller/profile_controller/profile_screen_controller.dart';
 import 'package:lead_app/view/bottom_nav_screen/bottom_navigationbar.dart';
 
 import 'package:lead_app/view/login_screen/login_screen.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LeadListController()..fetchLeads(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileController()..fetchUser(),
         )
       ],
       child: MaterialApp(

@@ -72,4 +72,25 @@ class ApiService {
       throw Exception('Failed to load user profile: ${response.statusCode}');
     }
   }
+
+  Future<UserModel> updateUserProfile(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+
+    final response = await http.patch(
+      Uri.parse('$_baseUrl/profile/'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return UserModel.fromJson(json['user']);
+    } else {
+      throw Exception('Failed to update profile');
+    }
+  }
 }

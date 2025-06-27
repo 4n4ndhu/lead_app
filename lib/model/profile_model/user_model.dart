@@ -1,5 +1,3 @@
-import 'package:flutter/rendering.dart';
-
 class UserModel {
   final int id;
   final String uid;

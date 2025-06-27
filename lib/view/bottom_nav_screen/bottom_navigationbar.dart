@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lead_app/controller/lead_controller/lead_list_controller.dart';
 import 'package:lead_app/view/lead_list_screen/lead_list_screen.dart';
 import 'package:lead_app/view/profile_screen/lead_profile_screen.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
@@ -24,6 +26,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           currentIndex: selected,
           onTap: (value) {
             selected = value;
+
             setState(() {});
           },
           type: BottomNavigationBarType.fixed,
@@ -43,7 +46,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 activeIcon: Icon(
                   Icons.person_outline,
                 ),
-                label: "Shorts"),
+                label: "Profile"),
           ]),
     );
   }
