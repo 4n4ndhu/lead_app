@@ -11,7 +11,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoginScreenController>();
-    final provider2 = context.watch<ProfileController>();
+    // final provider2 = context.watch<ProfileController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditProfileScreen(),
+                  builder: (context) => const EditProfileScreen(),
                 ),
               );
             },
