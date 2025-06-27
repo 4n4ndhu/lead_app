@@ -25,13 +25,19 @@ class ApiService {
     }
   }
 
-  Future<LeadListResponse> fetchLeads({int page = 1}) async {
+  Future<LeadListResponse> fetchLeads(
+      {int page = 1, String search = ''}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
     log('USING TOKEN: $token');
 
+    final uri = Uri.parse('$_baseUrl/leads/').replace(queryParameters: {
+      'page': page.toString(),
+      if (search.isNotEmpty) 'search': search
+    });
+
     final response = await http.get(
-      Uri.parse('$_baseUrl/leads/?page=$page'),
+      uri,
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

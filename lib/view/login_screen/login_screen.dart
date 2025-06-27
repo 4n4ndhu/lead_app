@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lead_app/controller/login_screen_controller.dart';
-import 'package:lead_app/view/bottom_navigationbar.dart';
-import 'package:lead_app/view/lead_list_screen.dart';
+import 'package:lead_app/controller/login_controller/login_screen_controller.dart';
+import 'package:lead_app/view/bottom_nav_screen/bottom_navigationbar.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,7 +13,7 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login screen"),
+        title: const Text("Login screen"),
       ),
       body: Center(
         child: Padding(
@@ -26,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: provider.loginEmailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black)),
                     focusedBorder: OutlineInputBorder(
@@ -44,10 +43,11 @@ class LoginScreen extends StatelessWidget {
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
+                  obscureText: true,
                   controller: provider.loginPassController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black)),
                     focusedBorder: OutlineInputBorder(
@@ -63,17 +63,17 @@ class LoginScreen extends StatelessWidget {
                     }
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 if (provider.errorMessage != null)
                   Text(provider.errorMessage!,
-                      style: TextStyle(color: Colors.red)),
+                      style: const TextStyle(color: Colors.red)),
                 SizedBox(
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ButtonStyle(
+                    style: const ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                     onPressed: provider.isLoading
                         ? null
@@ -87,14 +87,14 @@ class LoginScreen extends StatelessWidget {
                                   ));
 
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text('Login Successfull'),
                                   backgroundColor: Colors.green,
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text('Login Unsuccessfull'),
                                   backgroundColor: Colors.red,
                                 ),
@@ -102,8 +102,8 @@ class LoginScreen extends StatelessWidget {
                             }
                           },
                     child: provider.isLoading
-                        ? CircularProgressIndicator()
-                        : Text(
+                        ? const CircularProgressIndicator()
+                        : const Text(
                             'Login',
                             style: TextStyle(
                                 color: Colors.white,

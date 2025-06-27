@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lead_app/view/lead_list_screen.dart';
-import 'package:lead_app/view/lead_profile_screen.dart';
+import 'package:lead_app/view/lead_list_screen/lead_list_screen.dart';
+import 'package:lead_app/view/profile_screen/lead_profile_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});

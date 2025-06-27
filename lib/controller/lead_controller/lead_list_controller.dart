@@ -13,6 +13,7 @@ class LeadListController with ChangeNotifier {
   bool isLoading = false;
   bool hasMore = true;
   bool isRefreshing = false;
+  String searchQuery = '';
 
   /// Initial fetch or pull-to-refresh
   Future<void> fetchLeads({bool refresh = false}) async {
@@ -30,7 +31,8 @@ class LeadListController with ChangeNotifier {
     }
 
     try {
-      final response = await _api.fetchLeads(page: currentPage);
+      final response =
+          await _api.fetchLeads(page: currentPage, search: searchQuery);
       log("FETCHED ${response.results.length}leads from page $currentPage");
       leads.addAll(response.results);
       currentPage++;
@@ -45,6 +47,11 @@ class LeadListController with ChangeNotifier {
     isLoading = false;
     isRefreshing = false;
     notifyListeners();
+  }
+
+  void updateSearchQuery(String query) {
+    searchQuery = query;
+    fetchLeads(refresh: true);
   }
 
   void reset() {
