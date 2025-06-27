@@ -36,4 +36,9 @@ class ProfileController with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearUser() {
+    user = null;
+    notifyListeners();
+  }
 }

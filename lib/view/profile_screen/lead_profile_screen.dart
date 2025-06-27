@@ -11,6 +11,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<LoginScreenController>();
+    final provider2 = context.watch<ProfileController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -35,6 +36,9 @@ class ProfilePage extends StatelessWidget {
                 provider.logout();
                 provider.loginEmailController.clear();
                 provider.loginPassController.clear();
+                Provider.of<ProfileController>(context, listen: false)
+                    .clearUser();
+                // provider2.clearUser();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

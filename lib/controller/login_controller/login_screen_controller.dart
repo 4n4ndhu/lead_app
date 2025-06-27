@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lead_app/controller/profile_controller/profile_screen_controller.dart';
 import 'package:lead_app/service/api_service.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreenController with ChangeNotifier {
@@ -31,6 +33,7 @@ class LoginScreenController with ChangeNotifier {
       await prefs.clear();
       await prefs.setString('token', token); // Save token
       log("YOUR TOKEN : $token");
+      await Provider.of<ProfileController>(context, listen: false).fetchUser();
       await prefs.setBool('isLoggedIn', true); // Save login state
 
       isLoading = false;
